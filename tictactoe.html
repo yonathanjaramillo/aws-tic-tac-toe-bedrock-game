@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tic Tac Toe</title>
+<style>
+body { font-family: Arial; text-align: center; }
+.board { display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; justify-content: center; }
+.cell { width: 100px; height: 100px; font-size: 40px; cursor: pointer; }
+</style>
+</head>
+sh-5.2$ cat /usr/share/nginx/html/tictactoe.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tic Tac Toe</title>
+<style>
+body { font-family: Arial; text-align: center; }
+.board { display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; justify-content: center; }
+.cell { width: 100px; height: 100px; font-size: 40px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<h1>Tic Tac Toe</h1>
+<div class="board" id="board"></div>
+<h2 id="status"></h2>
+<button onclick="resetGame()">Reset</button>
+
+<script>
+let board = ["","","","","","","","",""];
+let currentPlayer = "X";
+let gameActive = true;
+
+const winConditions = [
+[0,1,2],[3,4,5],[6,7,8],
+[0,3,6],[1,4,7],[2,5,8],
+[0,4,8],[2,4,6]
+];
+
+const boardDiv = document.getElementById("board");
+const statusDiv = document.getElementById("status");
+
+function createBoard() {
+boardDiv.innerHTML = "";
+board.forEach((cell, index) => {
+let div = document.createElement("button");
+div.classList.add("cell");
+div.innerText = cell;
+div.onclick = () => makeMove(index);
+boardDiv.appendChild(div);
+});
+}
+
+function makeMove(index) {
+if(board[index] !== "" || !gameActive) return;
+
+board[index] = currentPlayer;
+checkWinner();
+currentPlayer = currentPlayer === "X" ? "O" : "X";
+createBoard();
+}
+
+function checkWinner() {
+for(let condition of winConditions){
+let [a,b,c] = condition;
+if(board[a] && board[a] === board[b] && board[a] === board[c]){
+statusDiv.innerText = board[a] + " wins!";
+gameActive = false;
+return;
+}
+}
+if(!board.includes("")){
+statusDiv.innerText = "Draw!";
+gameActive = false;
+}
+}
+
+function resetGame() {
+board = ["","","","","","","","",""];
+currentPlayer = "X";
+gameActive = true;
+statusDiv.innerText = "";
+createBoard();
+}
+
+createBoard();
+</script>
+
+</body>
+</html>
+sh-5.2$
